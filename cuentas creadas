@@ -1,0 +1,120 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Estructura para representar una cuenta
+struct Cuenta {
+    int numero;
+    string titular;
+    double saldo;
+    string pin;
+};
+
+// Declaración de funciones
+void mostrarMenu();
+void consultarSaldo(Cuenta cuenta);
+void realizarRetiro(Cuenta &cuenta);
+void realizarDeposito(Cuenta &cuenta);
+void realizarTransferencia(Cuenta cuentas[], int total, int actual);
+int buscarCuenta(Cuenta cuentas[], int total, int numero);
+
+int main() {
+    // Arreglo de 3 cuentas con saldos iniciales
+    Cuenta cuentas[3];
+    
+    // Inicializar cuenta 1
+    cuentas[0].numero = 101;
+    cuentas[0].titular = "Juan Perez";
+    cuentas[0].saldo = 5000.0;
+    cuentas[0].pin = "1234";
+    
+    // Inicializar cuenta 2
+    cuentas[1].numero = 102;
+    cuentas[1].titular = "Maria Lopez";
+    cuentas[1].saldo = 3000.0;
+    cuentas[1].pin = "5678";
+    
+    // Inicializar cuenta 3
+    cuentas[2].numero = 103;
+    cuentas[2].titular = "Pedro Garcia";
+    cuentas[2].saldo = 8000.0;
+    cuentas[2].pin = "9012";
+    
+    int numeroCuenta;
+    string pin;
+    int indiceCuenta = -1;
+    
+    cout << "===== CAJERO AUTOMATICO =====" << endl;
+    cout << "Ingrese numero de cuenta: ";
+    cin >> numeroCuenta;
+    
+    // Buscar la cuenta
+    indiceCuenta = buscarCuenta(cuentas, 3, numeroCuenta);
+    
+    if (indiceCuenta == -1) {
+        cout << "Error: Cuenta no encontrada" << endl;
+        return 1;
+    }
+    
+    cout << "Ingrese PIN: ";
+    cin >> pin;
+    
+    // Validar PIN
+    if (cuentas[indiceCuenta].pin != pin) {
+        cout << "Error: PIN incorrecto" << endl;
+        return 1;
+    }
+    
+    cout << "\nBienvenido " << cuentas[indiceCuenta].titular << endl;
+    
+    int opcion;
+    
+    // Menú principal
+    do {
+        mostrarMenu();
+        cout << "Opcion: ";
+        cin >> opcion;
+        
+        // Validar que la entrada sea un número
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "\nError: Ingrese un numero valido\n" << endl;
+            continue;
+        }
+        
+        cout << endl;
+        
+        // Ejecutar opción seleccionada
+        switch (opcion) {
+            case 1:
+                consultarSaldo(cuentas[indiceCuenta]);
+                break;
+                
+            case 2:
+                realizarRetiro(cuentas[indiceCuenta]);
+                break;
+                
+            case 3:
+                realizarDeposito(cuentas[indiceCuenta]);
+                break;
+                
+            case 4:
+                realizarTransferencia(cuentas, 3, indiceCuenta);
+                break;
+                
+            case 5:
+                cout << "Gracias por usar el cajero. Adios!" << endl;
+                break;
+                
+            default:
+                cout << "Opcion invalida" << endl;
+        }
+        
+        cout << endl;
+        
+    } while (opcion != 5);
+    
+    return 0;
+}
