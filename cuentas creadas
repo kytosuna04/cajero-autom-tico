@@ -118,3 +118,96 @@ int main() {
     
     return 0;
 }
+
+// Función para mostrar el menú
+void mostrarMenu() {
+    cout << "\n===== MENU PRINCIPAL =====" << endl;
+    cout << "1. Consultar Saldo" << endl;
+    cout << "2. Retirar Dinero" << endl;
+    cout << "3. Depositar Dinero" << endl;
+    cout << "4. Transferir Dinero" << endl;
+    cout << "5. Salir" << endl;
+    cout << "==========================" << endl;
+}
+
+// Función para consultar saldo
+void consultarSaldo(Cuenta cuenta) {
+    cout << "--- CONSULTA DE SALDO ---" << endl;
+    cout << "Titular: " << cuenta.titular << endl;
+    cout << "Saldo actual: $" << cuenta.saldo << endl;
+}
+
+// Función para realizar retiro (paso por referencia)
+void realizarRetiro(Cuenta &cuenta) {
+    double monto;
+    
+    cout << "--- RETIRO DE DINERO ---" << endl;
+    cout << "Saldo disponible: $" << cuenta.saldo << endl;
+    cout << "Ingrese monto a retirar: $";
+    cin >> monto;
+    
+    // Validación de entrada
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Error: Monto invalido" << endl;
+        return;
+    }
+    
+    // Validar monto positivo
+    if (monto <= 0) {
+        cout << "Error: El monto debe ser mayor a cero" << endl;
+        return;
+    }
+    
+    // Validar saldo suficiente
+    if (monto > cuenta.saldo) {
+        cout << "Error: Saldo insuficiente" << endl;
+        return;
+    }
+    
+    // Realizar retiro
+    cuenta.saldo = cuenta.saldo - monto;
+    cout << "Retiro exitoso!" << endl;
+    cout << "Nuevo saldo: $" << cuenta.saldo << endl;
+}
+
+// Función para realizar depósito (paso por referencia)
+void realizarDeposito(Cuenta &cuenta) {
+    double monto;
+    
+    cout << "--- DEPOSITO DE DINERO ---" << endl;
+    cout << "Saldo actual: $" << cuenta.saldo << endl;
+    cout << "Ingrese monto a depositar: $";
+    cin >> monto;
+    
+    // Validación de entrada
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Error: Monto invalido" << endl;
+        return;
+    }
+    
+    // Validar monto positivo
+    if (monto <= 0) {
+        cout << "Error: El monto debe ser mayor a cero" << endl;
+        return;
+    }
+    
+    // Realizar depósito
+    cuenta.saldo = cuenta.saldo + monto;
+    cout << "Deposito exitoso!" << endl;
+    cout << "Nuevo saldo: $" << cuenta.saldo << endl;
+}
+
+// Función para realizar transferencia (paso de arreglo por puntero)
+void realizarTransferencia(Cuenta cuentas[], int total, int actual) {
+    int numeroDestino;
+    double monto;
+    
+    cout << "--- TRANSFERENCIA ---" << endl;
+    cout << "Saldo disponible: $" << cuentas[actual].saldo << endl;
+    cout << "Ingrese numero de cuenta destino: ";
+    cin >> numeroDestino;
+
