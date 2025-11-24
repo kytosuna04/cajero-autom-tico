@@ -211,3 +211,67 @@ void realizarTransferencia(Cuenta cuentas[], int total, int actual) {
     cout << "Ingrese numero de cuenta destino: ";
     cin >> numeroDestino;
 
+    // Validación de entrada
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Error: Numero de cuenta invalido" << endl;
+        return;
+    }
+    
+    // Buscar cuenta destino
+    int indiceDestino = buscarCuenta(cuentas, total, numeroDestino);
+    
+    if (indiceDestino == -1) {
+        cout << "Error: Cuenta destino no encontrada" << endl;
+        return;
+    }
+    
+    // No permitir transferencia a la misma cuenta
+    if (indiceDestino == actual) {
+        cout << "Error: No puede transferir a su misma cuenta" << endl;
+        return;
+    }
+    
+    cout << "Destinatario: " << cuentas[indiceDestino].titular << endl;
+    cout << "Ingrese monto a transferir: $";
+    cin >> monto;
+    
+    // Validación de entrada
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Error: Monto invalido" << endl;
+        return;
+    }
+    
+    // Validar monto positivo
+    if (monto <= 0) {
+        cout << "Error: El monto debe ser mayor a cero" << endl;
+        return;
+    }
+    
+    // Validar saldo suficiente
+    if (monto > cuentas[actual].saldo) {
+        cout << "Error: Saldo insuficiente" << endl;
+        return;
+    }
+    
+    // Realizar transferencia
+    cuentas[actual].saldo = cuentas[actual].saldo - monto;
+    cuentas[indiceDestino].saldo = cuentas[indiceDestino].saldo + monto;
+    
+    cout << "Transferencia exitosa!" << endl;
+    cout << "Nuevo saldo: $" << cuentas[actual].saldo << endl;
+}
+
+// Función para buscar una cuenta por número (búsqueda en arreglo)
+int buscarCuenta(Cuenta cuentas[], int total, int numero) {
+    // Recorrer el arreglo
+    for (int i = 0; i < total; i++) {
+        if (cuentas[i].numero == numero) {
+            return i; // Retorna el índice
+        }
+    }
+    return -1; // No encontrada
+}
